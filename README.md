@@ -7,3 +7,6 @@ A track of papers I read. Most papers are in finance area.
 
 **Tags**: Machine Learning, Cross-Section of Expected Returns, Convolutional Neural Networks, Big Data, Return Predictability.
 
+2. [2022] lan W.R. Martin & Stefan Nagel, Market efficiency in the age of big data. *Journal of Financial Economics, 145(1)*, 154-177. [[PDF](https://www.sciencedirect.com/science/article/pii/S0304405X21004566#sec0002)]
+
+**Tags**: Bayesian Learning, High-Dimensional Prediction, Return Predictability, Out-of-Sample Tests.
