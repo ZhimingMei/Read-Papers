@@ -8,5 +8,11 @@ A track of papers I read. Most papers are in finance area.
 **Tags**: Machine Learning, Cross-Section of Expected Returns, Convolutional Neural Networks, Big Data, Return Predictability.
 
 
+2 [2022] lan W.R. Martin & Stefan Nagel, Market efficiency in the age of big data. *Journal of Financial Economics, 145(1)*, 154-177. [[PDF](https://www.sciencedirect.com/science/article/pii/S0304405X21004566#sec0002)]
 
-2 [2020] Cai Tony, Hu Jianchang, Li Yingying, and Zheng Xinghua, High-dimensional minimum variance portfolio estimation based on high-frequency data. *Journal of Econometrics, 214*: 482-494. [[PDF](https://www.sciencedirect.com/science/article/pii/S0304407619301630)]
+**Tags**: Bayesian Learning, High-Dimensional Prediction, Return Predictability, Out-of-Sample Tests.
+
+
+3 [2020] Cai Tony, Hu Jianchang, Li Yingying, and Zheng Xinghua, High-dimensional minimum variance portfolio estimation based on high-frequency data. *Journal of Econometrics, 214*: 482-494. [[PDF](https://www.sciencedirect.com/science/article/pii/S0304407619301630)]
+
+**Tags**: Minimum Variance Portfolio, High Dimension, High Frequency, CLIME Estimator.
