@@ -7,3 +7,6 @@ A track of papers I read. Most papers are in finance area.
 
 **Tags**: Machine Learning, Cross-Section of Expected Returns, Convolutional Neural Networks, Big Data, Return Predictability.
 
+
+
+2 [2020] Cai Tony, Hu Jianchang, Li Yingying, and Zheng Xinghua, High-dimensional minimum variance portfolio estimation based on high-frequency data. *Journal of Econometrics, 214*: 482-494. [[PDF](https://www.sciencedirect.com/science/article/pii/S0304407619301630)]
