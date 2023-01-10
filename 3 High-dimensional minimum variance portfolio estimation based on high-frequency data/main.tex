@@ -1,0 +1,384 @@
+\documentclass{beamer}
+% \documentclass[handout]{beamer}
+\usepackage{cuhkszbeamer}
+\addbibresource{ref.bib}
+
+% \CTEXoptions[today=old]
+
+\title[Read Papers]{High-dimensional minimum variance portfolio estimation based on high frequency data}
+\subtitle{\textit{Journal of Econometrics} (2020)}
+\author[Zhiming]{
+    Author: T. Tony Cai\footnote{Department of Statistics, The Wharton School, University of Pennsylvania}\quad Jianchang Hu\footnote{Department of Statistics, University of Wisconsin, Madison}\quad Yingying Li\footnote{Department of ISOM and Department of Finance, Hong Kong University of Science and Technology}\quad Xinghua Zheng\footnote{Department of ISOM, Hong Kong University of Science and Technology}
+    \vspace{0.1in}
+    }
+\date{\today}
+
+
+\begin{document}
+
+
+% Title page
+\frame[plain]{\maketitle}
+
+% Outline
+\begin{frame}{Outline}
+    \label{outline}
+    \tableofcontents{}
+\end{frame}
+
+\section{Background and Research Questions}
+
+
+\begin{frame}{Background}
+\textbf{Estimation of MVP}\\
+We want to find out the estimation of high-dimensional MVP using high-frequency data, i.e., given $p$ assets, we aim to find $\omega$ such that
+\begin{equation}
+    \label{eqt:1-1}
+    \arg \min_{\omega} \bm{\omega^T \Sigma \omega} \quad\text{subject to }\quad \bm{\omega^T 1}=1
+\end{equation}
+where $\bm{\omega} = (\omega_1,\dots, \omega_p)^T$ represents the weights put on different assets.
+
+And the optimal solution is given by
+\begin{equation}
+    \label{eqt:1-2}
+    \bm{\omega_{opt}} = \bm{\frac{\Sigma^{-1} 1}{1^T \Sigma^{-1}1}}
+\end{equation}
+which also yields the minimum risk
+\begin{equation}
+    \label{eqt:1-3}
+    R_{min}= \bm{\omega^T_{opt}\Sigma \omega_{opt}} = \frac{1}{\bm{1^T\Sigma^{-1}1}}
+\end{equation}
+\end{frame}
+
+\begin{frame}{Background}
+Since we do not have true covariance, we use the sample covariance instead. This leads to several issues.
+\begin{itemize}
+    \item The actual risk of the "plug-in" portfolio (the portfolio that uses the sample covariance) can be devastatingly higher than the theoretical minimum risk.
+    \item The perceived risk can be lower than the theoretical minimum risk.
+\end{itemize}
+To solve these problems, Fan et al (2012, \cite{fan2012vast}) add a gross-exposure constraint
+\begin{equation}
+    \label{eqt:1-4}
+    \underset{w}{\arg \min } \boldsymbol{w}^{\top} \boldsymbol{\Sigma} \boldsymbol{w} \quad \text { subject to } \quad \boldsymbol{w}^{\top} \mathbf{1}=1 \text { and }\|\boldsymbol{w}\|_1 \leq \lambda
+\end{equation}
+where $\|w\|_i = \Sigma_{i=1}^p|w_i|$ and $\lambda$ is a chosen constant.
+
+\end{frame}
+
+
+\begin{frame}{Background}
+    Since the difference between the risk of an estimated portfolio and the minimum risk going to zero \textbf{may not be sufficient to guarantee} optimality. (under rather general assumptions, the minimum risk $R_{\min} = 1/\bm{1}^T\Sigma^{-1}\bm{1}$ may go to zero as the number of assets $p\to \infty$.
+    \newline
+    
+    Based on this consideration, we turn to find $\hat{\bm{w}}$ which satisfies a stronger sense of consistency in that the ratio between the risk of the estimated portfolio and the minimum risk goes to 1, i.e., 
+    $$\frac{R(\hat{\bm{w}})}{R_{min}} \stackrel{p}{\longrightarrow} 1 \quad \text{as} \quad p\to \infty$$
+\end{frame}
+\begin{frame}{Research Questions}
+
+\begin{itemize}
+    \item What is the estimator of minimum variance portfolio that can accommodate stochastic volatility and market microstructure noise?
+    \item What is the estimator of the minimum risk?
+\end{itemize}
+
+\end{frame}
+
+\section{Estimation Methods and Asymptotic Properties}
+\subsection{High-frequency Data Model}
+\begin{frame}{High-frequency Data Model}
+
+We assume that the latent $p$-dimensional log-price process ($\bm{X}_t$) follows a diffusion model:
+\begin{equation}
+\label{eqt:2-1}
+    d \mathbf{X}_t=\boldsymbol{\mu}_t d t+\Theta_t d \mathbf{W}_t, \quad \text { for } t \geq 0
+\end{equation}
+where $\bm{\mu}_t$ is the drift process, $\bm{\Theta}_t$ is a $p\times p$ matrix-valued process called co-volatility process, and $\bm{W}_t$ is a $p$-dimensional Brownian motion.
+\newline
+
+Both $\bm{\mu}_t$ and $\bm{\Theta}_t$ are stochastic, càdlàg, and dependent on $\bm{W}_t$, all defined on a common filtered probability space $(\Omega, \mathcal{F}, (\mathcal{F}_t)_{t\geq 0})$
+\end{frame}
+
+\begin{frame}{High-frequency Data Model}
+Let
+$$\boldsymbol{\Sigma}_t=\boldsymbol{\Theta}_t \boldsymbol{\Theta}_t^{\top}:=\left(\sigma_t^{i j}\right)$$
+be the spot covariance matrix process. The \textit{ex-post} integrated covariance (ICV) matrix over an integral, say $[0, 1]$, is 
+$$\boldsymbol{\Sigma}_{\mathrm{ICV}}=\boldsymbol{\Sigma}_{\mathrm{ICV}, 1}=\left(\sigma^{i j}\right):=\int_0^1 \boldsymbol{\Sigma}_t d t$$
+
+And in this slide, the inverse of $\boldsymbol{\Sigma}_{\mathrm{ICV}}$ is denoted as $\boldsymbol{\Omega}_{\mathrm{ICV}}$, i.e., $\boldsymbol{\Omega}_{\mathrm{ICV}}:=\boldsymbol{\Sigma}_{\mathrm{ICV}}^{-1}$
+\end{frame}
+
+\begin{frame}{High-frequency Data Model}
+$\Sigma_{\text{ICV}}$ is only measurable to $\mathcal{F}_1$, and so is $R_{\min}$. So it is impossible to construct a portfolio that is measurable to $\mathcal{F}_0$ to achieve the minimum risk $R_{\min}$
+\newline
+
+The \textbf{practical implementation of MVP} relies on making forecasts of $\Sigma_{\text{ICV}}$ based on historical data.
+\newline
+
+The simplest approach is to assume $\Sigma_{\text{ICV, t}} \approx \Sigma_{\text{ICV,t+1}}$, where $\Sigma_{\text{ICV,t}}$ stands for the ICV matrix in period $[t-1, t]$. (The volatility process is often found to be nearly unit root, in which case the one-step ahead prediction is approximately the current value)
+
+If we can construct a portfolio $\bm{w}$ based on the observations during $[t-1, t]$ that can approximately minimize the \textbf{ex-post} risk $\bm{w}^T\Sigma_{\text{ICV,t}}\bm{w}$, then if we hold the portfolio during the next period $[t, t+1]$, the actual risk is \textbf{still approximately minimized}.
+\end{frame}
+
+\subsection{High-frequency Case with no Microstructure Noise}
+\begin{frame}{High-frequency Case with no Microstructure Noise}
+\textbf{Intuitive approach}: We use the constrained $\ell_1-$ minimization for inverse matrix estimation (CLIME, Cai et al, \cite{cai2011constrained})(under i.i.d. observation setting) to estimate the MVP. Denote the covariance matrix as $\Sigma$. Let $\Omega := \Sigma^{-1}$ be the precision matrix. The CLIME estimator is defined as,
+\begin{equation}
+\label{eqt:2-2}
+    \widehat{\boldsymbol{\Omega}}_{\mathrm{CLIME}}:=\underset{\Omega^{\prime}}{\arg \min }\left\|\boldsymbol{\Omega}^{\prime}\right\|_1 \text { subject to }\left\|\widehat{\boldsymbol{\Sigma}} \boldsymbol{\Omega}^{\prime}-\mathbf{I}\right\|_{\infty} \leq \lambda
+\end{equation}
+where $\hat{\bm{\Sigma}}$ is the sample covariance matrix. The $\lambda$ is a tuning parameter and is usually chosen via cross-validation.
+\end{frame}
+
+\begin{frame}{CLIME Method}
+The CLIME method is designed for the following uniformity class of precision matrices. For any $0\leq q < 1, s_0 = s_0(p)<\infty$ and $M=M(p)<\infty$, let
+\begin{equation}
+\label{eqt:2-3}
+\begin{aligned}
+\mathcal{U}\left(q, s_0, M\right)=
+&\{\boldsymbol{\Omega}=\left(\boldsymbol{\Omega}_{i j}\right)_{p \times p}: \boldsymbol{\Omega} \text { positive definite, }\\
+&\|\boldsymbol{\Omega}\|_{L_1} \leq M, \max _{1 \leq i \leq p} \sum_{j=1}^p\left|\boldsymbol{\Omega}_{i j}\right|^q \leq s_0\}
+\end{aligned}
+\end{equation}
+
+When the observations are i.i.d. sub-Gaussian and $\Omega$ belongs to $\mathcal{U}(q, s_0(p), M(p))$, this method establishes consistency of $\hat{\Omega}_{\text{CLIME}}$ when $M^{2-2q}s_0(\log p/n)^{(1-q)/2}\to 0$ holds.
+\newline
+
+However, in the high-frequency setting, the returns are not \textit{i.i.d.}, so \textbf{the results above cannot apply}.
+\end{frame}
+
+\begin{frame}{Sparsity Assumption}
+The sparsity assumption $\bm{\Omega} = \bm{\Sigma}^{-1} \in \mathcal{U}(q, s_0, M)$ (See Equation (\ref{eqt:2-3})) appears to be reasonable in financial applications. The following gives an example.\newline
+
+If the returns follow a conditional multivariate normal distribution matrix $\bm{\Sigma}$, then the $(i,j)$-th element in $\bm{\Omega}$ being 0 is equivalent to that the returns of the $i$-th and $j$-th assets are conditionally independent given the other asset returns. And for stocks in different sectors, many pairs might be \textbf{conditionally independent or only weak dependent}.
+\end{frame}
+
+\begin{frame}{CLIME Method in the High-Frequency Setting}
+Our goal is to estimate $\bm{\Omega}_{\text{ICV}}:= \bm{\Sigma}_{\text{ICV}}^{-1}$. And we use $\hat{\bm{\Sigma}}$ in Equation (\ref{eqt:2-2}). When the true log-price are observed, one of the most commonly used estimators for $\bm{\Sigma_{\text{ICV}}}$ is the realized covariance matrix (RCV).\newline
+
+For each asset $i$, the observations at stage $n$ are $(x^i_{t_{\ell}^{i,n}})$, where $0 = t_{0}^{i,n}<t_{1}^{i,n}<\dots<t_{N_i}^{i,n} = 1$ are the observation times. The $n$ characterizes the observation frequency. As $n\to \infty$, $N_i\to \infty$.
+
+The synchronous observation case corresponds to 
+$$t_{\ell}^{i,n} \equiv t_{\ell}^n\quad \text{for all}\quad i = 1,\dots, p$$ 
+which reduces to,
+\begin{equation}
+\label{eqt:2-4}
+    t_{\ell}^{i,n} = t_{\ell}^n = \ell/n , \ell = 0,1,\dots,n
+\end{equation}
+
+
+\end{frame}
+
+\begin{frame}{MVP Estimator with no Microstructure Noise}
+The \textbf{resulting MVP estimator} is,
+\begin{equation}
+\label{eqt:2-5}
+    \widehat{\boldsymbol{w}}_{\mathrm{CLIME}-\mathrm{SV}}=\frac{\widehat{\boldsymbol{\Omega}}_{\mathrm{CLIME}-\mathrm{SV}} \mathbf{1}}{\mathbf{1}^{\top} \widehat{\boldsymbol{\Omega}}_{\mathrm{CLIME}-\mathrm{SV}} \mathbf{1}}
+\end{equation}
+which is associated with a risk of,
+\begin{equation}
+\label{eqt:2-6}
+\begin{aligned}
+    R_{\mathrm{CLIME}-\mathrm{SV}}&
+    =\widehat{\boldsymbol{w}}_{\mathrm{CLIME}-\mathrm{SV}}^{\top} \boldsymbol{\Sigma}_{\mathrm{ICV}} \widehat{\boldsymbol{w}}_{\mathrm{CLIME}-\mathrm{SV}}\\
+    =&\frac{\left(\widehat{\boldsymbol{\Omega}}_{\mathrm{CLIME}-\mathrm{SV}} \mathbf{1}\right)^{\top} \boldsymbol{\Sigma}_{\mathrm{ICV}}\left(\widehat{\boldsymbol{\Omega}}_{\mathrm{CLIME}-\mathrm{SV}} \mathbf{1}\right)}{\left(\mathbf{1}^{\top} \widehat{\boldsymbol{\Omega}}_{\mathrm{CLIME}-\mathrm{SV}} \mathbf{1}\right)^2}
+\end{aligned}
+\end{equation}
+
+\end{frame}
+
+\begin{frame}{Induction of MVP Estimator in Equation (\ref{eqt:2-5})}
+In the synchronous observation (Equation \ref{eqt:2-4}), let
+$$\Delta \bm{X}_{\ell} := \bm{X}_{t_{\ell}^{n}} - \bm{X}_{t_{\ell -1}^n}$$
+be the log-return vector over the time period $[t_{\ell-1}^n, t_{\ell}^n]$. Then, the RCV matrix is defined as,
+\begin{equation}
+\label{eqt:2-7}
+    \widehat{\boldsymbol{\Sigma}}_{\mathrm{RCV}}=\sum_{\ell=1}^n \Delta \mathbf{X}_{\ell}\left(\Delta \mathbf{X}_{\ell}\right)^{\top}
+\end{equation}
+
+We now can conduct the \textbf{constrained $\ell_1$-minimization for inverse matrix estimation with stochastic volatility} (CLIME-SV), $\bm{\Omega_{\text{CLIME-SV}}}$,
+\begin{equation}
+\label{eqt:2-8}
+    \widehat{\boldsymbol{\Omega}}_{\mathrm{CLIME}-\mathrm{SV}}:=\underset{\boldsymbol{\Omega}^{\prime}}{\arg \min }\left\|\boldsymbol{\Omega}^{\prime}\right\|_1 \text { subject to }\left\|\widehat{\boldsymbol{\Sigma}}_{\mathrm{RCV}} \boldsymbol{\Omega}^{\prime}-\mathbf{I}\right\|_{\infty} \leq \lambda
+\end{equation}
+
+
+
+\end{frame}
+
+\subsection{High-frequency Case with Microstructure Noise}
+
+\begin{frame}{High-frequency Case with Microstructure Noise}
+However, in general, the observation prices are believed to be contaminated by microstructure noise. The true log-price $(X_{t_{\ell}^{i,n}}^i)$, for each asset $i$, at stage $n$ are
+\begin{equation}
+\label{eqt:2-9}
+Y_{t_{\ell}^{i, n}}^i=X_{t_{\ell}^{i, n}}^i+\varepsilon_{\ell}^i
+\end{equation}
+where the last term, $\varepsilon_{\ell}^i$'s represent microstructure noise.\newline
+
+In this case, if we simply plug $(Y_{t_{\ell}^{i,n}}^i)$ into the formula of RCV in Equation (\ref{eqt:2-7}), the resulting estimator is not \textbf{consistent} even when the dimension $p$ is fixed.
+\end{frame}
+
+\begin{frame}{Consistent Estimators in the Univariate Case}
+\begin{itemize}
+    \item Two-scales realized volatility (TSRV, Zhang et al. (2005))
+    \item Multi-scale realized volatility (MSRV, Zhang (2006))
+    \item Pre-averaging estimator (PAV, Jacod et al. (2009), Podolskij and Vetter (2009) and Jacod et al. (2019))
+    \item Realized kernels (RK, Barndorff-Nielsen et al. (2008))
+    \item Quasi-maximum likelihood estimator (QMLE, Xiu (2010))
+    \item Estimated-price realized volatility (ERV, Li et al. (2016))
+    \item Unified volatility estimator (UV, Li et al. (2018))
+\end{itemize}
+\textbf{Note}: These estimators are \textbf{not consistent} in the high-dimensional setting.\newline
+
+In this paper, we choose to work with \textbf{PAV}, with the equidistant time setting (\ref{eqt:2-4}). \textbf{Asynchronicity} can be dealt with by using existing data synchronization techniques.
+\end{frame}
+
+\begin{frame}{Implementation of PAV Estimator}
+To implement PAV estimator, we fix a constant $\theta >0$ and let $k_n = [\theta n^{1/2}]$ be the window length over which the averaging takes place. Define
+$$
+\overline{\mathbf{Y}}_k^n=\frac{\sum_{i=k_n / 2}^{k_n-1} \mathbf{Y}_{t_{k+i}}-\sum_{i=0}^{k_n / 2-1} \mathbf{Y}_{t_{k+i}}}{k_n}
+$$
+
+The PAV with weight function $g(x)=x \wedge(1-x)$ for $x \in(0,1)$ is defined as,
+\begin{equation}
+\label{eqt:2-10}
+\widehat{\boldsymbol{\Sigma}}_{\mathrm{PAV}}=\frac{12}{\theta \sqrt{n}} \sum_{k=0}^{n-k_n+1} \overline{\mathbf{Y}}_k^n \cdot\left(\overline{\mathbf{Y}}_k^n\right)^{\top}-\frac{6}{\theta^2 n} \operatorname{diag}\left(\sum_{k=1}^n\left(\Delta Y_{t_k}^i\right)^2\right)_{i=1, \ldots, p}
+\end{equation}
+
+We now define the \textbf{constrained $\ell_1$-minimization for inverse matrix estimation with stochastic volatility and microstructure noise}, $\widehat{\boldsymbol{\Omega}}_{\mathrm{CLIME}-\mathrm{SVMN}}$, as
+\begin{equation}
+\label{eqt:2-11}
+\widehat{\boldsymbol{\Omega}}_{\mathrm{CLIME}-\mathrm{SVMN}}:=\underset{\boldsymbol{\Omega}^{\prime}}{\arg \min }\left\|\boldsymbol{\Omega}^{\prime}\right\|_1 \text { subject to }\left\|\widehat{\boldsymbol{\Sigma}}_{\mathrm{PAV}} \boldsymbol{\Omega}^{\prime}-\mathbf{I}\right\|_{\infty} \leq \lambda
+\end{equation}
+\end{frame}
+
+\subsection{Estimating the Minimum Risk}
+\begin{frame}{Minimum Risk with CLIME Based Estimators with Sparsity Assumption}
+Recall Equation (\ref{eqt:1-3}), $R_{min}= \bm{\omega^T_{opt}\Sigma \omega_{opt}} = \frac{1}{\bm{1^T\Sigma^{-1}1}}$. Our estimator under sparsity assumption with no microstructure noise is,
+\begin{equation}
+\label{eqt:2-12}
+\widehat{R}_{\text{CLIME-SV}}=\frac{1}{\mathbf{1}^{\top} \widehat{\Omega}_{\text{CLIME-SV}} \mathbf{1}}
+\end{equation}
+where $\widehat{\Omega}_{\text{CLIME-SV}}$ is given in Equation (\ref{eqt:2-8}). If there's microstructure noise, we have the corresponding minimum risk,
+\begin{equation}
+\label{eqt:2-13}
+\widehat{R}_{\text{CLIME-SVMN}}=\frac{1}{\mathbf{1}^{\top} \widehat{\Omega}_{\text{CLIME-SVMN}} \mathbf{1}}
+\end{equation}
+where $\widehat{\Omega}_{\text{CLIME-SVMN}}$ is given in Equation (\ref{eqt:2-11})
+\end{frame}
+
+\begin{frame}{Without Sparsity Assumption: Low-Frequency i.i.d. Returns}
+This estimator is hence more suitable for the \textbf{low-frequency setting} and can be used to estimate the minimum risk over a long time period.\newline
+
+Suppose we observe $n$ i.i.d. returns $\bm{X}_1, \dots, \bm{X}_n$ (at low frequency). Let $\bm{S}$ be the sample covariance matrix, and $\bm{w}_p = \frac{\bm{S}^{-1}\bm{1}}{\bm{1}^T\bm{S}^{-1}\bm{1}}$ be the "plug-in" portfolio. The corresponding perceived risk is $\hat{R_p} = \bm{w}_p^T\bm{S}\bm{w}_p$.\newline
+
+We have the following results on the relationship between $\hat{R_p}$ and the minimum risk $R_{\min}$ based on which a \textbf{consistent estimator} of the minimum risk is constructed.
+\end{frame}
+
+\begin{frame}{Relationship between $\hat{R_p}$ and $R_{\min}$}
+Suppose that the returns $\bm{X}_1, \dots, \bm{X}_n\sim \mathcal{N}(\bm{\mu, \Sigma})$. Suppose that both $n$ and $p \to \infty$, in such a way that $p_n := p/n\to \rho \in (0,1) $. Then
+\begin{equation}
+\label{eqt:2-14}
+\left|\frac{\widehat{R}_p}{R_{\min }}-\left(1-\rho_n\right)\right| \stackrel{p}{\longrightarrow} 0
+\end{equation}
+Therefore, if we define
+\begin{equation}
+\label{eqt:2-15}
+\widehat{R}_{\min }=\frac{1}{1-\rho_n} \widehat{R}_p
+\end{equation}
+then, we have
+\begin{equation}
+\label{eqt:2-16}
+\frac{\widehat{R}_{\min }}{R_{\min }} \stackrel{p}{\longrightarrow} 1
+\end{equation}
+and furthermore,
+\begin{equation}
+\label{eqt:2-17}
+\sqrt{n-p}\left(\frac{\widehat{R}_{\min }}{R_{\min }}-1\right) \Rightarrow \mathcal{N}(0,2)
+\end{equation}
+
+\end{frame}
+
+\begin{frame}{Interpretation of above Relationship}
+Convergence (\ref{eqt:2-14}) explains why the perceived risk is systematically lower than the minimum risk.
+
+Convergence (\ref{eqt:2-17}) shows the "blessing" of dimensionality: \textbf{the higher the dimension, the more accurate the estimation.}\newline
+
+In Basak et al (2009, \cite{basak2009jackknife}), it is shown that the risk of the "plug-in" portfolio is on average a higher-than-one multiple of the minimum risk. 
+
+Since $n$ and $p \to \infty$ and $p_n := p/n\to \rho \in (0,1) $ their result can be strengthened to be that the risk of the "plug-in" portfolio is, with probability approaching one, a larger-than-one multiple of the minimum risk.
+
+Using the results of Basak et al, we can show that,
+\begin{equation}
+\label{eqt:2-18}
+\frac{R\left(\boldsymbol{w}_p\right)}{R_{\min }} \stackrel{p}{\longrightarrow} \frac{1}{1-\rho}
+\end{equation}
+where $R(\bm{w}_p) = \bm{w}_p^T\bm{\Sigma}\bm{w}_p$ is the risk of the "plug-in" portfolio.
+\end{frame} 
+
+\section{Estimation with Factors}
+\begin{frame}{High-Frequency Factor Structure}
+Let $\bm{r}_k = (r_{k,1},\dots, r_{k,p})^T, k = 1,\dots, n$ be asset returns, which can either be high-frequency or low-frequency returns. Assume $\bm{r}_k$ admits a factor structure as follows,
+\begin{equation}
+\label{eqt:3-1}
+\mathbf{r}_k=\alpha+\Gamma \mathbf{f}_k+\mathbf{z}_k
+\end{equation}
+where $\alpha$ is a $p\times 1$ unknown vector, $\Gamma$ is a $p\times m$ unknown matrix, $\bm{f}_k = (f_{k,1},\dots, f_{k,m})^T$ are factor returns, and $\bm{z}_k$ is $p\times 1$ random vector with mean 0 and covariance matrix $\bm{\Sigma}_{k,0} = (\sigma_{ij}^{k,0})$\newline
+
+We assume that, for each $k$, $\bm{f}_k$'s and $\bm{z}_k$'s are independent, and the pairs $(\bm{r}_k, \bm{f}_k)$ are mutually independent. Let $\bm{\Sigma}_{\bm{r}, k} = \text{Cov}(\bm{r}_k) $ and $\bm{\Sigma}_{\bm{f}, k} = \text{Cov}(\bm{f}_k) $, and let them be dependent on the time index $k$, \textbf{to accommodate the stochastic (co-)volatility}. 
+
+It's impossible to estimate individual $\bm{\Sigma}_{\bm{r}, k}$ and $\bm{\Sigma}_{\bm{f}, k}$, but it's possible to estimate their means $\boldsymbol{\Sigma}_{\mathbf{r}}=\frac{1}{n} \sum_{k=1}^n \boldsymbol{\Sigma}_{\mathbf{r}, k}, \boldsymbol{\Sigma}_{\mathbf{f}}=\frac{1}{n} \sum_{k=1}^n \boldsymbol{\Sigma}_{\mathbf{f}, k}$, and $\boldsymbol{\Sigma}_0=\frac{1}{n} \sum_{k=1}^n \boldsymbol{\Sigma}_{k, 0}$, and the corresponding $\bm{\Omega}_0 = \bm{\Sigma_0}^{-1}$
+\end{frame}
+
+\begin{frame}{CLIME Method in Factor Structure}
+\textbf{Target}: Estimate the precision matrix $\bm{\Omega_r}:= \bm{\Sigma_r}^{-1}$\newline
+
+
+We define the \textbf{constrained $\ell_1$-minimization for inverse matrix estimation adjusted for factor} (CLIME-F), $\hat{\bm{\Omega}}_{\text{CLIME-F}}$, as
+\begin{equation}
+\label{eqt:3-2}
+\widehat{\boldsymbol{\Omega}}_{\text {CLIME-F }}=\widehat{\boldsymbol{\Omega}}_0-\widehat{\boldsymbol{\Omega}}_0 \widehat{\Gamma}\left(\mathbf{S}_{\mathbf{f}}^{-1}+\widehat{\Gamma}^{\top} \widehat{\boldsymbol{\Omega}} \widehat{0} \widehat{\Gamma}\right)^{-1} \widehat{\Gamma}^{\top} \widehat{\boldsymbol{\Omega}}_0
+\end{equation}
+where $\bm{S_f}$ is the sample covariance of $\bm{f_k}$. And also, the \textbf{MVP estimator} is 
+\begin{equation}
+\label{eqt:3-3}
+\widehat{\boldsymbol{w}}_{\mathrm{CLIME}-\mathrm{F}}=\frac{\widehat{\boldsymbol{\Omega}}_{\mathrm{CLIME}-\mathrm{F}} \mathbf{1}}{\mathbf{1}^{\top} \widehat{\boldsymbol{\Omega}}_{\mathrm{CLIME}-\mathrm{F}} \mathbf{1}}
+\end{equation}
+\end{frame}
+
+\begin{frame}{Induction of CLIME Method in Factor Structure}
+
+To estimate the model, we calculate the least square estimators of $\alpha$ and $\Gamma$, denoted by $\hat{\alpha}$ and $\hat{\Gamma}$. The residuals are $\bm{e}_k := \bm{r}_k-\hat{\alpha}-\hat{\Gamma}\bm{f}_k$. Then we have the CLIME estimator of $\bm{\Omega}_0$, denoted by $\hat{\bm{\Omega}_0}$ based on residuals.
+
+\begin{equation}
+\label{eqt:3-4}
+\widehat{\boldsymbol{\Omega}}_0:=\underset{\Omega^{\prime}}{\arg \min }\left\|\boldsymbol{\Omega}^{\prime}\right\|_1 \text { subject to }\left\|\mathbf{S}_{\mathbf{e}} \boldsymbol{\Omega}^{\prime}-\mathbf{I}\right\|_{\infty} \leq \lambda
+\end{equation}
+where $\bm{S_e}$ is the sample covariance matrix of residuals. Note that, $\boldsymbol{\Sigma}_{\mathbf{r}}=\Gamma \boldsymbol{\Sigma}_{\mathbf{f}} \Gamma^{\top}+\boldsymbol{\Sigma}_0$, we have,
+\begin{equation}
+\label{eqt:3-5}
+\boldsymbol{\Omega}_{\mathbf{r}}=\left(\Gamma \boldsymbol{\Sigma}_{\mathbf{f}} \Gamma^{\top}+\boldsymbol{\Sigma}_0\right)^{-1}=\boldsymbol{\Omega}_0-\boldsymbol{\Omega}_0 \Gamma\left(\boldsymbol{\Sigma}_{\mathbf{f}}^{-1}+\Gamma^{\top} \boldsymbol{\Omega}_0 \Gamma\right)^{-1} \Gamma^{\top} \boldsymbol{\Omega}_0
+\end{equation}
+Therefore, we can define the CLIME-F in (\ref{eqt:3-2})
+
+\end{frame}
+
+\section{Conclusions}
+
+\begin{frame}{Conclusions}
+\textbf{Conclusions}
+\begin{itemize}
+    \item Propose estimators of the MVP in the high-dimensional setting based on high-frequency data.
+    \item Propose consistent estimators of minimum risk with and without sparsity assumption
+\end{itemize}
+
+\textbf{Note}: For the details of simulation studies and empirical studies, please refer to Sections (4) and (5) in \href{https://www.sciencedirect.com/science/article/pii/S0304407619301630}{High-dimensional minimum variance portfolio estimation based on high-frequency data}.
+\end{frame}
+
+
+ 
+\begin{frame}[t,allowframebreaks]
+  \frametitle{References}
+  \printbibliography
+ \end{frame}
+ 
+\end{document}
